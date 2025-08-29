@@ -72,14 +72,14 @@ const mockTransactions = [
 
 const Expenses = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterCategory, setFilterCategory] = useState("");
-  const [filterType, setFilterType] = useState("");
+  const [filterCategory, setFilterCategory] = useState("all");
+  const [filterType, setFilterType] = useState("all");
 
   const filteredTransactions = mockTransactions.filter((transaction) => {
     const matchesSearch = transaction.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          transaction.category.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = !filterCategory || transaction.category === filterCategory;
-    const matchesType = !filterType || transaction.type === filterType;
+    const matchesCategory = filterCategory === "all" || !filterCategory || transaction.category === filterCategory;
+    const matchesType = filterType === "all" || !filterType || transaction.type === filterType;
     
     return matchesSearch && matchesCategory && matchesType;
   });
@@ -148,7 +148,7 @@ const Expenses = () => {
                 <SelectValue placeholder="Tipo" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todos</SelectItem>
+                <SelectItem value="all">Todos</SelectItem>
                 <SelectItem value="expense">Gastos</SelectItem>
                 <SelectItem value="income">Ingresos</SelectItem>
               </SelectContent>
@@ -159,7 +159,7 @@ const Expenses = () => {
                 <SelectValue placeholder="Categoría" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todas</SelectItem>
+                <SelectItem value="all">Todas</SelectItem>
                 <SelectItem value="Transporte">Transporte</SelectItem>
                 <SelectItem value="Alimentación">Alimentación</SelectItem>
                 <SelectItem value="Suministros">Suministros</SelectItem>
@@ -231,11 +231,11 @@ const Expenses = () => {
         <Card className="shadow-card">
           <CardContent className="p-8 text-center">
             <p className="text-muted-foreground">No se encontraron transacciones</p>
-            <Button variant="link" onClick={() => {
-              setSearchTerm("");
-              setFilterCategory("");
-              setFilterType("");
-            }}>
+          <Button variant="link" onClick={() => {
+            setSearchTerm("");
+            setFilterCategory("all");
+            setFilterType("all");
+          }}>
               Limpiar filtros
             </Button>
           </CardContent>
